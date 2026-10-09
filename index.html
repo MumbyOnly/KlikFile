@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KlikFile — Download File</title>
+<style>
+:root{--blue:#1769e0;--navy:#102443;--bg:#f4f7fc;--muted:#66758b;--line:#e3eaf4;--green:#138653}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--navy)}
+header{background:white;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:2}
+.wrap{width:min(100% - 28px,1000px);margin:auto}.top{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+.brand{font-size:23px;font-weight:850;letter-spacing:-.7px;color:var(--blue)}.brand span{color:var(--navy)}
+button,input,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:var(--blue);color:white}
+button.secondary{background:#eaf2ff;color:var(--blue)}button.ghost{background:transparent;color:var(--navy)}
+.hero{margin:22px 0;padding:25px 22px;border-radius:20px;background:linear-gradient(135deg,#0d4db4,#2384f4);color:white}
+.hero h1{font-size:clamp(26px,6vw,40px);line-height:1.1;margin:0 0 10px}.hero p{margin:0 0 18px;color:#e7f1ff;max-width:550px}
+.search{display:flex;gap:8px}.search input{flex:1;min-width:0}
+input,textarea{border:1px solid #d6e0ee;border-radius:10px;padding:12px;background:white;width:100%;color:var(--navy)}
+h2{font-size:20px;margin:24px 0 12px}.muted{color:var(--muted);font-size:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat,.panel,.file{background:white;border:1px solid var(--line);border-radius:15px;padding:15px}
+.stat strong{display:block;font-size:22px}.stat span{font-size:12px;color:var(--muted)}
+.files{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fileicon{font-size:28px;background:#eef4ff;border-radius:12px;width:48px;height:48px;display:grid;place-items:center;margin-bottom:12px}
+.file h3{font-size:16px;margin:0 0 5px}.file .meta{font-size:12px;color:var(--muted);margin-bottom:12px}.filefoot{display:flex;align-items:center;justify-content:space-between;gap:8px}.price{font-weight:800;color:var(--green);font-size:14px}
+nav{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:9px 0 calc(9px + env(safe-area-inset-bottom));z-index:3}
+nav button{background:transparent;color:var(--muted);padding:6px 9px;font-size:12px}nav button.active{color:var(--blue)}
+main{padding-bottom:90px}.page{display:none}.page.active{display:block}.notice{font-size:13px;background:#fff8df;border:1px solid #f3e1a0;padding:12px;border-radius:12px;color:#6b5510;margin-top:14px}
+label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px}.profilehead{display:flex;align-items:center;gap:14px}.avatar{height:64px;width:64px;border-radius:50%;background:#e7efff;color:var(--blue);display:grid;place-items:center;font-size:26px;font-weight:800;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}
+.listrow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.hidden{display:none!important}.pill{background:#eaf7ef;color:#117545;padding:5px 8px;border-radius:99px;font-size:12px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:22px}
+@media(min-width:700px){.files{grid-template-columns:repeat(3,minmax(0,1fr))}.hero{padding:38px}.mobilegrid{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}}
+</style>
+</head>
+<body>
+<header><div class="wrap top"><div class="brand">⬇ Klik<span>File</span></div><button class="secondary" onclick="showPage('profile')">Akun saya</button></div></header>
+<main class="wrap">
+<section id="home" class="page active">
+ <div class="hero"><h1>Temukan file.<br>Download dengan mudah.</h1><p>Jelajahi file pilihan komunitas KlikFile. Versi ini adalah demo lokal untuk mencoba tampilan dan alur website.</p><div class="search"><input id="search" placeholder="Cari file..." oninput="renderFiles()"><button onclick="renderFiles()">Cari</button></div></div>
+ <div class="stats"><div class="stat"><strong id="totalFiles">3</strong><span>File contoh</span></div><div class="stat"><strong id="totalClicks">0</strong><span>Klik download demo</span></div><div class="stat"><strong>Rp0</strong><span>Pendapatan terverifikasi</span></div></div>
+ <h2>File tersedia</h2><div id="files" class="files"></div>
+ <div class="notice">Catatan: tombol download di versi demo hanya mencatat klik percobaan. Belum ada iklan, pembayaran, saldo sungguhan, atau pencairan uang.</div>
+</section>
+<section id="profile" class="page">
+ <h2>Profil pengguna</h2><div class="panel">
+ <div class="profilehead"><div class="avatar" id="avatar">K</div><div><strong id="profileName">Pengunjung KlikFile</strong><div class="muted">Profil demo di perangkat ini</div></div></div>
+ <label>Nama tampilan</label><input id="nameInput" placeholder="Masukkan nama">
+ <label>Foto profil (opsional)</label><input id="photoInput" type="file" accept="image/*">
+ <button style="margin-top:14px" onclick="saveProfile()">Simpan profil demo</button>
+ <p class="muted">Profil tersimpan di browser perangkat ini saja. Belum merupakan akun online.</p></div>
+ <h2>Ringkasan</h2><div class="panel"><div class="listrow"><span>Klik download demo</span><strong id="profileClicks">0</strong></div><div class="listrow"><span>Saldo</span><strong>Rp0</strong></div><div class="listrow"><span>Status akun</span><span class="pill">Mode demo</span></div></div>
+</section>
+<section id="activity" class="page"><h2>Aktivitas unduhan</h2><div class="panel"><p class="muted">Klik tombol download pada halaman Beranda untuk melihat aktivitas percobaan di sini.</p><div id="history"></div></div></section>
+<section id="about" class="page"><h2>Tentang KlikFile</h2><div class="panel"><p>KlikFile adalah konsep website untuk menemukan dan mengunduh file dengan mudah.</p><p>Rencana pengembangan: akun pengguna online, upload file yang aman, statistik unduhan valid, sumber pendapatan resmi, dan pencairan ke rekening atau e-wallet setelah persyaratan pembayaran dipenuhi.</p><p class="muted">Hanya unggah atau bagikan file yang kamu miliki atau berhak distribusikan.</p></div></section>
+</main>
+<nav><button id="nav-home" class="active" onclick="showPage('home')">⌂<br>Beranda</button><button id="nav-activity" onclick="showPage('activity')">⇩<br>Aktivitas</button><button id="nav-profile" onclick="showPage('profile')">♙<br>Profil</button><button id="nav-about" onclick="showPage('about')">ⓘ<br>Tentang</button></nav>
+<footer>KlikFile · Prototipe v0.1 · Belum memproses uang sungguhan</footer>
+<script>
+const filesData=[
+ {id:1,name:"Template CV Modern",desc:"Template CV untuk melamar pekerjaan.",size:"2 MB",type:"📄",format:"PDF",price:"Gratis"},
+ {id:2,name:"Wallpaper Alam 4K",desc:"Wallpaper pemandangan untuk perangkat kamu.",size:"5 MB",type:"🖼️",format:"JPG",price:"Gratis"},
+ {id:3,name:"E-book Belajar Coding",desc:"Panduan pengantar HTML dan CSS.",size:"3 MB",type:"📚",format:"PDF",price:"Gratis"}
+];
+let clicks=Number(localStorage.getItem("kf_clicks")||0), history=JSON.parse(localStorage.getItem("kf_history")||"[]");
+function renderFiles(){let q=(document.getElementById("search")?.value||"").toLowerCase();let items=filesData.filter(f=>(f.name+" "+f.desc+" "+f.format).toLowerCase().includes(q));document.getElementById("files").innerHTML=items.map(f=>`<article class="file"><div class="fileicon">${f.type}</div><h3>${f.name}</h3><div class="meta">${f.format} · ${f.size}</div><p class="muted">${f.desc}</p><div class="filefoot"><span class="price">${f.price}</span><button onclick="downloadDemo(${f.id})">Download</button></div></article>`).join("")||'<p class="muted">File tidak ditemukan.</p>';document.getElementById("totalFiles").textContent=filesData.length;updateStats()}
+function downloadDemo(id){let f=filesData.find(x=>x.id===id);clicks++;history.unshift({name:f.name,time:new Date().toLocaleString("id-ID")});history=history.slice(0,20);localStorage.setItem("kf_clicks",clicks);localStorage.setItem("kf_history",JSON.stringify(history));updateStats();alert("Klik demo tercatat untuk: "+f.name+". Ini belum mengunduh file asli dan tidak menghasilkan uang.");}
+function updateStats(){document.getElementById("totalClicks").textContent=clicks;document.getElementById("profileClicks").textContent=clicks;document.getElementById("history").innerHTML=history.length?history.map(h=>`<div class="listrow"><span>${h.name}<br><small class="muted">${h.time}</small></span><span class="pill">Demo</span></div>`).join(""):'<p class="muted">Belum ada aktivitas.</p>'}
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));document.getElementById("nav-"+id)?.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});if(id==="activity")updateStats()}
+function saveProfile(){let n=document.getElementById("nameInput").value.trim()||"Pengunjung KlikFile";localStorage.setItem("kf_name",n);document.getElementById("profileName").textContent=n;document.getElementById("avatar").textContent=n[0].toUpperCase();alert("Profil demo disimpan di perangkat ini.");}
+document.getElementById("photoInput").addEventListener("change",e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{document.getElementById("avatar").innerHTML='<img alt="Foto profil" src="'+r.result+'">';localStorage.setItem("kf_photo",r.result)};r.readAsDataURL(f)});
+(function(){let n=localStorage.getItem("kf_name");if(n){document.getElementById("profileName").textContent=n;document.getElementById("nameInput").value=n;document.getElementById("avatar").textContent=n[0].toUpperCase()}let p=localStorage.getItem("kf_photo");if(p)document.getElementById("avatar").innerHTML='<img alt="Foto profil" src="'+p+'">';renderFiles()})();
+</script>
+</body></html>
